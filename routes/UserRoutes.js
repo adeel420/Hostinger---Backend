@@ -186,18 +186,16 @@ router.get(
   "/auth/google/callback",
   passport.authenticate("google", {
     session: false,
-    failureRedirect: "https://hostinger-backend.onrender.comlogin",
+    failureRedirect: process.env.FRONTEND_URL + "/login",
   }),
   async (req, res) => {
     try {
       const token = generateToken({ id: req.user._id });
-      res.redirect(
-        `https://hostinger-backend.onrender.comauth/success?token=${token}`,
-      );
+      const frontendUrl = process.env.FRONTEND_URL || "http://localhost:5173";
+      res.redirect(`${frontendUrl}/auth/success?token=${token}`);
     } catch (err) {
-      res.redirect(
-        "https://hostinger-backend.onrender.comlogin?error=auth_failed",
-      );
+      const frontendUrl = process.env.FRONTEND_URL || "http://localhost:5173";
+      res.redirect(`${frontendUrl}/login?error=auth_failed`);
     }
   },
 );
@@ -215,18 +213,16 @@ router.get(
   "/auth/github/callback",
   passport.authenticate("github", {
     session: false,
-    failureRedirect: "https://hostinger-backend.onrender.comlogin",
+    failureRedirect: process.env.FRONTEND_URL + "/login",
   }),
   async (req, res) => {
     try {
       const token = generateToken({ id: req.user._id });
-      res.redirect(
-        `https://hostinger-backend.onrender.comauth/success?token=${token}`,
-      );
+      const frontendUrl = process.env.FRONTEND_URL || "http://localhost:5173";
+      res.redirect(`${frontendUrl}/auth/success?token=${token}`);
     } catch (err) {
-      res.redirect(
-        "https://hostinger-backend.onrender.comlogin?error=auth_failed",
-      );
+      const frontendUrl = process.env.FRONTEND_URL || "http://localhost:5173";
+      res.redirect(`${frontendUrl}/login?error=auth_failed`);
     }
   },
 );
@@ -244,18 +240,16 @@ router.get(
   "/auth/facebook/callback",
   passport.authenticate("facebook", {
     session: false,
-    failureRedirect: "https://hostinger-backend.onrender.comlogin",
+    failureRedirect: process.env.FRONTEND_URL + "/login",
   }),
   async (req, res) => {
     try {
       const token = generateToken({ id: req.user._id });
-      res.redirect(
-        `https://hostinger-backend.onrender.comauth/success?token=${token}`,
-      );
+      const frontendUrl = process.env.FRONTEND_URL || "http://localhost:5173";
+      res.redirect(`${frontendUrl}/auth/success?token=${token}`);
     } catch (err) {
-      res.redirect(
-        "https://hostinger-backend.onrender.comlogin?error=auth_failed",
-      );
+      const frontendUrl = process.env.FRONTEND_URL || "http://localhost:5173";
+      res.redirect(`${frontendUrl}/login?error=auth_failed`);
     }
   },
 );
