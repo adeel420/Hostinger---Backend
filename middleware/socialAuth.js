@@ -5,13 +5,18 @@ const FacebookStrategy = require('passport-facebook').Strategy;
 const User = require('../models/userModel');
 const { welcomeCode } = require('./email');
 
+const getCallbackURL = (provider) => {
+  const baseURL = process.env.BACKEND_URL || 'http://localhost:8080';
+  return `${baseURL}/user/auth/${provider}/callback`;
+};
+
 if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
   passport.use(
     new GoogleStrategy(
       {
         clientID: process.env.GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        callbackURL: '/user/auth/google/callback'
+        callbackURL: getCallbackURL('google')
       },
       async (accessToken, refreshToken, profile, done) => {
         try {
@@ -50,7 +55,7 @@ if (process.env.GITHUB_CLIENT_ID && process.env.GITHUB_CLIENT_SECRET) {
       {
         clientID: process.env.GITHUB_CLIENT_ID,
         clientSecret: process.env.GITHUB_CLIENT_SECRET,
-        callbackURL: '/user/auth/github/callback',
+        callbackURL: getCallbackURL('github'),
         scope: ['user:email']
       },
       async (accessToken, refreshToken, profile, done) => {
@@ -91,7 +96,7 @@ if (process.env.FACEBOOK_APP_ID && process.env.FACEBOOK_APP_SECRET) {
       {
         clientID: process.env.FACEBOOK_APP_ID,
         clientSecret: process.env.FACEBOOK_APP_SECRET,
-        callbackURL: '/user/auth/facebook/callback',
+        callbackURL: getCallbackURL('facebook'),
         profileFields: ['id', 'displayName', 'emails', 'photos']
       },
       async (accessToken, refreshToken, profile, done) => {
