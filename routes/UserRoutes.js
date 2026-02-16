@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 const User = require("../models/userModel");
 const { sendVerificationCode, welcomeCode } = require("../middleware/email");
 const { jwtAuthMiddleware, generateToken } = require("../middleware/jwt");
+const passport = require("../middleware/socialAuth");
 const router = express.Router();
 const saltRounds = 10;
 
@@ -171,5 +172,92 @@ router.get("/login-data", jwtAuthMiddleware, async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 });
+
+// Google OAuth
+router.get(
+  "/auth/google",
+  passport.authenticate("google", {
+    scope: ["profile", "email"],
+    session: false,
+  }),
+);
+
+router.get(
+  "/auth/google/callback",
+  passport.authenticate("google", {
+    session: false,
+    failureRedirect: "https://hostinger-backend.onrender.comlogin",
+  }),
+  async (req, res) => {
+    try {
+      const token = generateToken({ id: req.user._id });
+      res.redirect(
+        `https://hostinger-backend.onrender.comauth/success?token=${token}`,
+      );
+    } catch (err) {
+      res.redirect(
+        "https://hostinger-backend.onrender.comlogin?error=auth_failed",
+      );
+    }
+  },
+);
+
+// GitHub OAuth
+router.get(
+  "/auth/github",
+  passport.authenticate("github", {
+    scope: ["user:email"],
+    session: false,
+  }),
+);
+
+router.get(
+  "/auth/github/callback",
+  passport.authenticate("github", {
+    session: false,
+    failureRedirect: "https://hostinger-backend.onrender.comlogin",
+  }),
+  async (req, res) => {
+    try {
+      const token = generateToken({ id: req.user._id });
+      res.redirect(
+        `https://hostinger-backend.onrender.comauth/success?token=${token}`,
+      );
+    } catch (err) {
+      res.redirect(
+        "https://hostinger-backend.onrender.comlogin?error=auth_failed",
+      );
+    }
+  },
+);
+
+// Facebook OAuth
+router.get(
+  "/auth/facebook",
+  passport.authenticate("facebook", {
+    scope: ["email"],
+    session: false,
+  }),
+);
+
+router.get(
+  "/auth/facebook/callback",
+  passport.authenticate("facebook", {
+    session: false,
+    failureRedirect: "https://hostinger-backend.onrender.comlogin",
+  }),
+  async (req, res) => {
+    try {
+      const token = generateToken({ id: req.user._id });
+      res.redirect(
+        `https://hostinger-backend.onrender.comauth/success?token=${token}`,
+      );
+    } catch (err) {
+      res.redirect(
+        "https://hostinger-backend.onrender.comlogin?error=auth_failed",
+      );
+    }
+  },
+);
 
 module.exports = router;

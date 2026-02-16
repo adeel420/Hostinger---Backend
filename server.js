@@ -5,6 +5,7 @@ require("dotenv").config();
 const db = require("./db");
 const userRoutes = require("./routes/UserRoutes");
 const passport = require("./middleware/auth");
+const socialPassport = require("./middleware/socialAuth");
 const cors = require("cors");
 
 // Packages
@@ -12,6 +13,7 @@ app.use(cors());
 const PORT = process.env.PORT || 8080;
 app.use(bodyParser.json());
 app.use(passport.initialize());
+app.use(socialPassport.initialize());
 const authMiddleware = passport.authenticate("local", { session: false });
 
 // Routes
