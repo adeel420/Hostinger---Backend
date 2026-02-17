@@ -23,9 +23,6 @@ if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
           let user = await User.findOne({ email: profile.emails[0].value });
 
           if (user) {
-            if (user.authProvider !== 'google' && user.authProvider !== 'local') {
-              return done(null, false, { message: `Email already registered with ${user.authProvider}` });
-            }
             return done(null, user);
           }
 
@@ -64,9 +61,6 @@ if (process.env.GITHUB_CLIENT_ID && process.env.GITHUB_CLIENT_SECRET) {
           let user = await User.findOne({ email });
 
           if (user) {
-            if (user.authProvider !== 'github' && user.authProvider !== 'local') {
-              return done(null, false, { message: `Email already registered with ${user.authProvider}` });
-            }
             return done(null, user);
           }
 
@@ -105,9 +99,6 @@ if (process.env.FACEBOOK_APP_ID && process.env.FACEBOOK_APP_SECRET) {
           let user = await User.findOne({ email });
 
           if (user) {
-            if (user.authProvider !== 'facebook' && user.authProvider !== 'local') {
-              return done(null, false, { message: `Email already registered with ${user.authProvider}` });
-            }
             return done(null, user);
           }
 
