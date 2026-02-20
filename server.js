@@ -8,6 +8,7 @@ const hostingRoutes = require("./routes/hostingRoutes");
 const domainRoutes = require("./routes/domainRoutes");
 const orderRoutes = require("./routes/orderRoutes");
 const contactRoutes = require("./routes/contactRoutes");
+const serviceRoutes = require("./routes/serviceRoutes");
 const passport = require("./middleware/auth");
 const socialPassport = require("./middleware/socialAuth");
 const cors = require("cors");
@@ -28,6 +29,7 @@ app.use("/hosting", hostingRoutes);
 app.use("/domain", domainRoutes);
 app.use("/api", orderRoutes);
 app.use("/contact", contactRoutes);
+app.use("/service", serviceRoutes);
 
 app.listen(PORT, () => {
   console.log(`Listening the port ${PORT}`);

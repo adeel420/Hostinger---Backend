@@ -6,11 +6,7 @@ const { jwtAuthMiddleware } = require("../middleware/jwt");
 // Get all active hosting plans (Public)
 router.get("/plans", async (req, res) => {
   try {
-    const { type } = req.query; // Filter by hosting type
-    const filter = { isActive: true };
-    if (type) filter.hostingType = type;
-    
-    const plans = await HostingPlan.find(filter).sort({ price: 1 });
+    const plans = await HostingPlan.find({ isActive: true }).sort({ "pricing.monthly": 1 });
     res.status(200).json(plans);
   } catch (err) {
     res.status(500).json({ error: "Failed to fetch plans" });
@@ -20,22 +16,17 @@ router.get("/plans", async (req, res) => {
 // Create hosting plan (Admin only)
 router.post("/plans", jwtAuthMiddleware, async (req, res) => {
   try {
-    const { name, hostingType, price, period, storage, bandwidth, websites, emailAccounts, cpuCores, ram, features, isPopular, whmcsProductId } = req.body;
+    const { name, pricing, storage, bandwidth, websites, emailAccounts, features, isPopular } = req.body;
     
     const plan = new HostingPlan({
       name,
-      hostingType,
-      price,
-      period,
+      pricing,
       storage,
       bandwidth,
       websites,
       emailAccounts,
-      cpuCores,
-      ram,
       features,
       isPopular,
-      whmcsProductId,
     });
     
     await plan.save();

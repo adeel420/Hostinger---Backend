@@ -18,16 +18,16 @@ router.post("/search", async (req, res) => {
   try {
     const { domainName } = req.body;
     const domains = await Domain.find({ isActive: true });
-    
+
     // Simulate domain search results
-    const results = domains.map(domain => ({
+    const results = domains.map((domain) => ({
       domainName: `${domainName}${domain.extension}`,
       extension: domain.extension,
       price: domain.price,
       period: domain.period,
       available: Math.random() > 0.3, // Simulate availability
     }));
-    
+
     res.status(200).json(results);
   } catch (err) {
     res.status(500).json({ error: "Failed to search domain" });
@@ -48,10 +48,10 @@ router.get("/domains", async (req, res) => {
 router.post("/domains", jwtAuthMiddleware, async (req, res) => {
   try {
     const { extension, price, period, whmcsTldId } = req.body;
-    
+
     const domain = new Domain({ extension, price, period, whmcsTldId });
     await domain.save();
-    
+
     res.status(201).json({ message: "Domain created successfully", domain });
   } catch (err) {
     res.status(500).json({ error: "Failed to create domain" });
@@ -61,7 +61,9 @@ router.post("/domains", jwtAuthMiddleware, async (req, res) => {
 // Update domain (Admin only)
 router.put("/domains/:id", jwtAuthMiddleware, async (req, res) => {
   try {
-    const domain = await Domain.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const domain = await Domain.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+    });
     if (!domain) return res.status(404).json({ error: "Domain not found" });
     res.status(200).json({ message: "Domain updated successfully", domain });
   } catch (err) {
